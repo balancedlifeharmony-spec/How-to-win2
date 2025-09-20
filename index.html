@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Win - Success Principles</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            padding: 40px 0;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .principle-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .principle-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .principle-card.expanded {
+            grid-column: 1 / -1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-right: 15px;
+            color: white;
+        }
+
+        .taking-risk .card-icon { background: linear-gradient(45deg, #ff6b6b, #ee5a24); }
+        .hard-work .card-icon { background: linear-gradient(45deg, #4834d4, #686de0); }
+        .leadership .card-icon { background: linear-gradient(45deg, #00d2d3, #54a0ff); }
+        .personal-growth .card-icon { background: linear-gradient(45deg, #5f27cd, #a55eea); }
+        .entrepreneurship .card-icon { background: linear-gradient(45deg, #00d2d3, #01a3a4); }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+            flex: 1;
+        }
+
+        .expand-icon {
+            font-size: 20px;
+            color: #7f8c8d;
+            transition: transform 0.3s ease;
+        }
+
+        .principle-card.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        .card-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .principle-card.expanded .card-content {
+            max-height: 1000px;
+        }
+
+        .principle-list {
+            list-style: none;
+        }
+
+        .principle-list li {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .taking-risk .principle-list li { border-left-color: #ff6b6b; }
+        .hard-work .principle-list li { border-left-color: #4834d4; }
+        .leadership .principle-list li { border-left-color: #00d2d3; }
+        .personal-growth .principle-list li { border-left-color: #5f27cd; }
+        .entrepreneurship .principle-list li { border-left-color: #00d2d3; }
+
+        .principle-list li:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .principle-list li strong {
+            color: #2c3e50;
+        }
+
+        .stats-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            padding: 20px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .principles-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .principle-card.expanded {
+                grid-column: 1;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            padding: 20px;
+            opacity: 0.8;
+        }
+
+        .language-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 25px;
+            padding: 10px 20px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-weight: 600;
+        }
+
+        .language-toggle:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+        }
+
+        .rtl {
+            direction: rtl;
+            text-align: right;
+        }
+
+        .rtl .header {
+            text-align: center;
+        }
+
+        .rtl .card-header {
+            flex-direction: row-reverse;
+        }
+
+        .rtl .card-icon {
+            margin-left: 15px;
+            margin-right: 0;
+        }
+
+        .rtl .principle-list li {
+            border-right: 4px solid;
+            border-left: none;
+        }
+
+        .rtl .taking-risk .principle-list li { border-right-color: #ff6b6b; }
+        .rtl .hard-work .principle-list li { border-right-color: #4834d4; }
+        .rtl .leadership .principle-list li { border-right-color: #00d2d3; }
+        .rtl .personal-growth .principle-list li { border-right-color: #5f27cd; }
+        .rtl .entrepreneurship .principle-list li { border-right-color: #00d2d3; }
+
+        .rtl .principle-list li:hover {
+            transform: translateX(-5px);
+        }
+
+        .rtl .stats-section {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="language-toggle" onclick="toggleLanguage()">
+        <span id="language-btn">العربية</span>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>How to Win</h1>
+            <p>Essential principles for success in business and life</p>
+        </div>
+
+        <div class="principles-grid">
+            <div class="principle-card taking-risk" onclick="toggleCard(this)">
+                <div class="card-header">
+                    <div class="card-icon">🎯</div>
+                    <div class="card-title">Taking Risk</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="card-content">
+                    <ul class="principle-list">
+                        <li><strong>Innovation requires failure:</strong> If things are not failing, you are not innovating enough</li>
+                        <li><strong>Overcome bias:</strong> There's a tremendous bias against taking risks. Everyone is trying to optimize their ass-covering.</li>
+                        <li><strong>Embrace change:</strong> Some people don't like change, but you need to embrace change if the alternative is disaster.</li>
+                        <li><strong>Establish possibility:</strong> The first step is to establish that something is possible; then probability will occur.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="principle-card hard-work" onclick="toggleCard(this)">
+                <div class="card-header">
+                    <div class="card-icon">💪</div>
+                    <div class="card-title">Hard Work</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="card-content">
+                    <ul class="principle-list">
+                        <li><strong>Never give up:</strong> Persistence is very important. You should not give up unless you are forced to give up.</li>
+                        <li><strong>Work intensely:</strong> Work like hell. I mean you just have to put in 80 to 100 hour weeks every week. This improves the odds of success.</li>
+                        <li><strong>Do what's important:</strong> When something is important enough, you do it even if the odds are not in your favor.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="principle-card leadership" onclick="toggleCard(this)">
+                <div class="card-header">
+                    <div class="card-icon">👑</div>
+                    <div class="card-title">Leadership</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="card-content">
+                    <ul class="principle-list">
+                        <li><strong>Technical leadership:</strong> The path to the CEO's office should not be through the CFO's office, and it should not be through the marketing department. It needs to be through engineering and design.</li>
+                        <li><strong>Clear purpose:</strong> People work better when they know what the goal is and why. It is important that people look forward to coming to work in the morning and enjoy working.</li>
+                        <li><strong>Lead by example:</strong> If you're a co-founder or CEO, you have to do all kinds of tasks you might not want to do. No task is too menial.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="principle-card personal-growth" onclick="toggleCard(this)">
+                <div class="card-header">
+                    <div class="card-icon">🌱</div>
+                    <div class="card-title">Personal Growth</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="card-content">
+                    <ul class="principle-list">
+                        <li><strong>Feedback loop:</strong> Very important to have a feedback loop, where you're constantly thinking about what you've done and how you could be doing it better.</li>
+                        <li><strong>Seek criticism:</strong> Really pay attention to negative feedback and solicit it, particularly from friends.</li>
+                        <li><strong>Choose extraordinary:</strong> It is possible for ordinary people to choose to be extraordinary</li>
+                        <li><strong>Optimistic mindset:</strong> If you get up in the morning and think the future is going to be better, it is a bright day.</li>
+                        <li><strong>Follow passion:</strong> People should pursue what they're passionate about. That will make them happier than pretty much anything else.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="principle-card entrepreneurship" onclick="toggleCard(this)">
+                <div class="card-header">
+                    <div class="card-icon">🚀</div>
+                    <div class="card-title">Entrepreneurship</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="card-content">
+                    <ul class="principle-list">
+                        <li><strong>People matter most:</strong> Starting and growing a business is as much about the innovation, drive, and determination of the people behind it as the product they sell.</li>
+                        <li><strong>Extreme difficulty:</strong> Being an entrepreneur is like eating glass and staring into the abyss of death</li>
+                        <li><strong>Collective innovation:</strong> When somebody has a breakthrough, it is rarely one little thing. Very rarely, is it one little thing. It's usually a whole bunch of things that collectively amount to a huge innovation.</li>
+                        <li><strong>Talent and teamwork:</strong> Talent is extremely important. It's like a sports team, the team that has the best individual player will often win, but then there's a multiplier from how those players work together and the strategy they employ.</li>
+                        <li><strong>Quality over quantity:</strong> It is a mistake to hire huge numbers of people to get a complicated job done. Numbers will never compensate for talent in getting the right answer.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <h2>Success Metrics</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Core Principles</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100</div>
+                    <div class="stat-label">Hours/Week</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Potential</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Success comes from the combination of risk-taking, hard work, leadership, personal growth, and entrepreneurial spirit.</p>
+            <div style="margin-top: 30px; padding: 25px; background: rgba(255,255,255,0.1); border-radius: 10px; backdrop-filter: blur(10px);">
+                <p style="font-weight: bold; font-size: 1.1rem; margin-bottom: 10px;">Built by Victory Hour Multimedia Inc.</p>
+                <p style="margin-bottom: 10px;">🌐 www.victoryhourmedia.com | ✉️ info@victoryhourmedia.com</p>
+                <p style="font-style: italic; font-weight: bold;">We build brands that lead. From strategy to design to digital presence—your growth is our mission.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Translation data
+        const translations = {
+            en: {
+                languageBtn: 'العربية',
+                title: 'How to Win',
+                subtitle: 'Essential principles for success in business and life',
+                takingRisk: 'Taking Risk',
+                hardWork: 'Hard Work',
+                leadership: 'Leadership',
+                personalGrowth: 'Personal Growth',
+                entrepreneurship: 'Entrepreneurship',
+                successMetrics: 'Success Metrics',
+                coreInples: 'Core Principles',
+                hoursWeek: 'Hours/Week',
+                potential: 'Potential',
+                footerText: 'Success comes from the combination of risk-taking, hard work, leadership, personal growth, and entrepreneurial spirit.',
+                builtBy: 'Built by Victory Hour Multimedia Inc.',
+                contact: '🌐 www.victoryhourmedia.com | ✉️ info@victoryhourmedia.com',
+                mission: 'We build brands that lead. From strategy to design to digital presence—your growth is our mission.',
+                principles: {
+                    takingRisk: [
+                        '<strong>Innovation requires failure:</strong> If things are not failing, you are not innovating enough',
+                        '<strong>Overcome bias:</strong> There\'s a tremendous bias against taking risks. Everyone is trying to optimize their ass-covering.',
+                        '<strong>Embrace change:</strong> Some people don\'t like change, but you need to embrace change if the alternative is disaster.',
+                        '<strong>Establish possibility:</strong> The first step is to establish that something is possible; then probability will occur.'
+                    ],
+                    hardWork: [
+                        '<strong>Never give up:</strong> Persistence is very important. You should not give up unless you are forced to give up.',
+                        '<strong>Work intensely:</strong> Work like hell. I mean you just have to put in 80 to 100 hour weeks every week. This improves the odds of success.',
+                        '<strong>Do what\'s important:</strong> When something is important enough, you do it even if the odds are not in your favor.'
+                    ],
+                    leadership: [
+                        '<strong>Technical leadership:</strong> The path to the CEO\'s office should not be through the CFO\'s office, and it should not be through the marketing department. It needs to be through engineering and design.',
+                        '<strong>Clear purpose:</strong> People work better when they know what the goal is and why. It is important that people look forward to coming to work in the morning and enjoy working.',
+                        '<strong>Lead by example:</strong> If you\'re a co-founder or CEO, you have to do all kinds of tasks you might not want to do. No task is too menial.'
+                    ],
+                    personalGrowth: [
+                        '<strong>Feedback loop:</strong> Very important to have a feedback loop, where you\'re constantly thinking about what you\'ve done and how you could be doing it better.',
+                        '<strong>Seek criticism:</strong> Really pay attention to negative feedback and solicit it, particularly from friends.',
+                        '<strong>Choose extraordinary:</strong> It is possible for ordinary people to choose to be extraordinary',
+                        '<strong>Optimistic mindset:</strong> If you get up in the morning and think the future is going to be better, it is a bright day.',
+                        '<strong>Follow passion:</strong> People should pursue what they\'re passionate about. That will make them happier than pretty much anything else.'
+                    ],
+                    entrepreneurship: [
+                        '<strong>People matter most:</strong> Starting and growing a business is as much about the innovation, drive, and determination of the people behind it as the product they sell.',
+                        '<strong>Extreme difficulty:</strong> Being an entrepreneur is like eating glass and staring into the abyss of death',
+                        '<strong>Collective innovation:</strong> When somebody has a breakthrough, it is rarely one little thing. Very rarely, is it one little thing. It\'s usually a whole bunch of things that collectively amount to a huge innovation.',
+                        '<strong>Talent and teamwork:</strong> Talent is extremely important. It\'s like a sports team, the team that has the best individual player will often win, but then there\'s a multiplier from how those players work together and the strategy they employ.',
+                        '<strong>Quality over quantity:</strong> It is a mistake to hire huge numbers of people to get a complicated job done. Numbers will never compensate for talent in getting the right answer.'
+                    ]
+                }
+            },
+            ar: {
+                languageBtn: 'English',
+                title: 'كيف تنجح',
+                subtitle: 'المبادئ الأساسية للنجاح في الأعمال والحياة',
+                takingRisk: 'المخاطرة',
+                hardWork: 'العمل الجاد',
+                leadership: 'القيادة',
+                personalGrowth: 'النمو الشخصي',
+                entrepreneurship: 'ريادة الأعمال',
+                successMetrics: 'مؤشرات النجاح',
+                coreInples: 'المبادئ الأساسية',
+                hoursWeek: 'ساعة/أسبوع',
+                potential: 'الإمكانات',
+                footerText: 'النجاح يأتي من الجمع بين المخاطرة والعمل الجاد والقيادة والنمو الشخصي وروح ريادة الأعمال.',
+                builtBy: 'تم التطوير بواسطة شركة فيكتوري آور مالتيميديا',
+                contact: '🌐 www.victoryhourmedia.com | ✉️ info@victoryhourmedia.com',
+                mission: 'نحن نبني علامات تجارية تقود السوق. من الاستراتيجية إلى التصميم إلى الحضور الرقمي—نموك هو مهمتنا.',
+                principles: {
+                    takingRisk: [
+                        '<strong>الابتكار يتطلب الفشل:</strong> إذا لم تكن الأشياء تفشل، فأنت لا تبتكر بما فيه الكفاية',
+                        '<strong>تجاوز التحيز:</strong> هناك تحيز هائل ضد المخاطرة. الجميع يحاول تحسين حماية أنفسهم.',
+                        '<strong>احتضان التغيير:</strong> بعض الناس لا يحبون التغيير، لكن عليك احتضان التغيير إذا كان البديل هو الكارثة.',
+                        '<strong>تأسيس الإمكانية:</strong> الخطوة الأولى هي تأسيس أن شيئًا ما ممكن؛ ثم ستحدث الاحتمالية.'
+                    ],
+                    hardWork: [
+                        '<strong>لا تستسلم أبدًا:</strong> المثابرة مهمة جدًا. يجب ألا تستسلم إلا إذا أُجبرت على الاستسلام.',
+                        '<strong>اعمل بكثافة:</strong> اعمل مثل الجحيم. أعني أنه عليك أن تعمل من 80 إلى 100 ساعة كل أسبوع. هذا يحسن فرص النجاح.',
+                        '<strong>افعل ما هو مهم:</strong> عندما يكون شيء مهمًا بما فيه الكفاية، تفعله حتى لو لم تكن الاحتمالات في صالحك.'
+                    ],
+                    leadership: [
+                        '<strong>القيادة التقنية:</strong> الطريق إلى مكتب الرئيس التنفيذي يجب ألا يكون من خلال مكتب المدير المالي، ولا من خلال قسم التسويق. يجب أن يكون من خلال الهندسة والتصميم.',
+                        '<strong>الهدف الواضح:</strong> الناس يعملون بشكل أفضل عندما يعرفون ما هو الهدف ولماذا. من المهم أن يتطلع الناس للحضور إلى العمل في الصباح ويستمتعوا بالعمل.',
+                        '<strong>القيادة بالمثال:</strong> إذا كنت مؤسسًا مشاركًا أو رئيسًا تنفيذيًا، عليك القيام بجميع أنواع المهام التي قد لا ترغب في القيام بها. لا توجد مهمة تافهة جدًا.'
+                    ],
+                    personalGrowth: [
+                        '<strong>حلقة التغذية الراجعة:</strong> من المهم جدًا أن تكون لديك حلقة تغذية راجعة، حيث تفكر باستمرار في ما فعلته وكيف يمكنك فعله بشكل أفضل.',
+                        '<strong>اطلب النقد:</strong> انتبه حقًا للتغذية الراجعة السلبية واطلبها، خاصة من الأصدقاء.',
+                        '<strong>اختر أن تكون استثنائيًا:</strong> من الممكن للأشخاص العاديين أن يختاروا أن يكونوا استثنائيين',
+                        '<strong>العقلية المتفائلة:</strong> إذا استيقظت في الصباح وتعتقد أن المستقبل سيكون أفضل، فهو يوم مشرق.',
+                        '<strong>اتبع شغفك:</strong> يجب على الناس متابعة ما يتشوقون إليه. هذا سيجعلهم أسعد من أي شيء آخر تقريبًا.'
+                    ],
+                    entrepreneurship: [
+                        '<strong>الناس هم الأهم:</strong> بدء وتنمية الأعمال يتعلق بقدر ما بالابتكار والدافع والتصميم للأشخاص وراءها كما يتعلق بالمنتج الذي يبيعونه.',
+                        '<strong>صعوبة شديدة:</strong> كونك رائد أعمال يشبه أكل الزجاج والنظر في هاوية الموت',
+                        '<strong>الابتكار الجماعي:</strong> عندما يحقق شخص ما اختراقًا، نادرًا ما يكون شيئًا صغيرًا واحدًا. نادرًا جدًا، يكون شيئًا صغيرًا واحدًا. عادة ما يكون مجموعة كاملة من الأشياء التي تشكل مجتمعة ابتكارًا ضخمًا.',
+                        '<strong>الموهبة والعمل الجماعي:</strong> الموهبة مهمة للغاية. إنها مثل فريق رياضي، الفريق الذي لديه أفضل لاعب فردي سيفوز غالبًا، لكن هناك مضاعف من كيفية عمل هؤلاء اللاعبين معًا والاستراتيجية التي يستخدمونها.',
+                        '<strong>الجودة على الكمية:</strong> من الخطأ توظيف أعداد هائلة من الناس لإنجاز مهمة معقدة. الأرقام لن تعوض أبدًا عن الموهبة في الحصول على الإجابة الصحيحة.'
+                    ]
+                }
+            }
+        };
+
+        let currentLanguage = 'en';
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'ar' : 'en';
+            applyTranslations();
+            
+            // Toggle RTL for Arabic
+            const body = document.body;
+            if (currentLanguage === 'ar') {
+                body.classList.add('rtl');
+            } else {
+                body.classList.remove('rtl');
+            }
+        }
+
+        function applyTranslations() {
+            const t = translations[currentLanguage];
+            
+            // Update language button
+            document.getElementById('language-btn').textContent = t.languageBtn;
+            
+            // Update header
+            document.querySelector('.header h1').textContent = t.title;
+            document.querySelector('.header p').textContent = t.subtitle;
+            
+            // Update card titles
+            document.querySelectorAll('.card-title')[0].textContent = t.takingRisk;
+            document.querySelectorAll('.card-title')[1].textContent = t.hardWork;
+            document.querySelectorAll('.card-title')[2].textContent = t.leadership;
+            document.querySelectorAll('.card-title')[3].textContent = t.personalGrowth;
+            document.querySelectorAll('.card-title')[4].textContent = t.entrepreneurship;
+            
+            // Update principles
+            const principleCards = document.querySelectorAll('.principle-card');
+            const principleKeys = ['takingRisk', 'hardWork', 'leadership', 'personalGrowth', 'entrepreneurship'];
+            
+            principleCards.forEach((card, index) => {
+                const list = card.querySelector('.principle-list');
+                const principles = t.principles[principleKeys[index]];
+                list.innerHTML = principles.map(p => `<li>${p}</li>`).join('');
+            });
+            
+            // Update stats section
+            document.querySelector('.stats-section h2').textContent = t.successMetrics;
+            document.querySelectorAll('.stat-label')[0].textContent = t.coreInples;
+            document.querySelectorAll('.stat-label')[1].textContent = t.hoursWeek;
+            document.querySelectorAll('.stat-label')[2].textContent = t.potential;
+            
+            // Update footer
+            document.querySelector('.footer p').textContent = t.footerText;
+            document.querySelector('.footer div p:first-child').textContent = t.builtBy;
+            document.querySelector('.footer div p:nth-child(2)').textContent = t.contact;
+            document.querySelector('.footer div p:last-child').textContent = t.mission;
+        }
+
+        function toggleCard(card) {
+            const isExpanded = card.classList.contains('expanded');
+            
+            // Close all cards first
+            document.querySelectorAll('.principle-card').forEach(c => {
+                c.classList.remove('expanded');
+            });
+            
+            // If this card wasn't expanded, expand it
+            if (!isExpanded) {
+                card.classList.add('expanded');
+            }
+        }
+
+        // Add some interactive animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate cards on load
+            const cards = document.querySelectorAll('.principle-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+
+            // Add click sound effect simulation
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 100);
+                });
+            });
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key >= '1' && e.key <= '5') {
+                const cardIndex = parseInt(e.key) - 1;
+                const cards = document.querySelectorAll('.principle-card');
+                if (cards[cardIndex]) {
+                    toggleCard(cards[cardIndex]);
+                    cards[cardIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+            
+            // Toggle language with 'L' key
+            if (e.key.toLowerCase() === 'l') {
+                toggleLanguage();
+            }
+        });
+    </script>
+</body>
+</html>
